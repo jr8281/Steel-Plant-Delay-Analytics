@@ -1,0 +1,102 @@
+/* ============================================
+   STEEL PLANT DELAY ANALYTICS
+   SIDEBAR STYLES (Overrides Streamlit native)
+============================================ */
+
+/* The actual Streamlit native sidebar */
+[data-testid="stSidebar"] {
+    width: 280px !important;
+    min-width: 280px !important;
+    max-width: 280px !important;
+    background-color: var(--bg-sidebar) !important;
+    border-right: 1px solid var(--border-color);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+[data-testid="stSidebar"] > div:first-child {
+    padding: 0 !important;
+    padding-top: 16px !important;
+    background-color: transparent !important;
+}
+
+/* Hide native sidebar navigation */
+[data-testid="stSidebarNav"] {
+    display: none !important;
+}
+
+/* 
+  Custom Navigation via Streamlit Radio buttons.
+  We hide the radio circles and style the labels as buttons.
+*/
+.sidebar-nav-container {
+    padding: 0 16px;
+    margin-top: 24px;
+}
+
+/* Target the radio group inside the sidebar */
+[data-testid="stSidebar"] .stRadio > div[role="radiogroup"] {
+    gap: 8px;
+    padding: 0 16px;
+}
+
+[data-testid="stSidebar"] .stRadio label {
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: var(--text-sidebar);
+    font-weight: 500;
+    margin: 4px 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    background: transparent;
+}
+
+/* Hide the actual radio circle */
+[data-testid="stSidebar"] .stRadio input {
+    display: none;
+}
+[data-testid="stSidebar"] .stRadio [data-testid="stMarkdownContainer"] {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+[data-testid="stSidebar"] .stRadio label p {
+    color: var(--text-secondary) !important;
+    font-size: var(--text-sidebar) !important;
+    margin: 0 !important;
+}
+
+/* Radio button hover */
+[data-testid="stSidebar"] .stRadio label:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+[data-testid="stSidebar"] .stRadio label:hover p {
+    color: var(--text-primary) !important;
+}
+
+/* Active navigation item styling (checked radio) */
+[data-testid="stSidebar"] .stRadio label:has(input:checked) {
+    background: var(--accent-blue);
+}
+[data-testid="stSidebar"] .stRadio label:has(input:checked) p {
+    color: #FFFFFF !important; /* Force white text */
+    font-weight: 600 !important;
+}
+
+/* Footer for sidebar */
+.sidebar-footer {
+    padding: 16px 24px 8px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.theme-toggle-container {
+    padding: 16px;
+    margin-top: auto;
+    border-top: 1px solid var(--border-color);
+}

@@ -1,0 +1,155 @@
+/* ============================================
+   STEEL PLANT DELAY ANALYTICS
+   COMPONENTS
+============================================ */
+
+/* ============================================
+   CARDS
+============================================ */
+.custom-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-xl); /* 18px */
+    padding: 24px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.2s ease;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.custom-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--border-hover);
+}
+
+.card-title {
+    font-size: var(--text-card-title);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+/* Override Streamlit's Native Metric Cards */
+[data-testid="stMetric"] {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 24px;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+[data-testid="stMetric"]:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+[data-testid="stMetricLabel"] {
+    color: var(--text-secondary) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+}
+
+[data-testid="stMetricValue"] {
+    font-family: var(--font-family) !important;
+    font-size: 32px !important;
+    font-weight: 800 !important;
+    color: var(--text-primary) !important;
+}
+
+/* ============================================
+   BUTTONS
+============================================ */
+/* Primary Button (Overrides Streamlit Primary) */
+.stButton button[kind="primary"] {
+    background: linear-gradient(135deg, var(--accent-blue), #1D4ED8) !important;
+    border: none !important;
+    border-radius: var(--radius-md) !important;
+    color: white !important;
+    font-weight: 600 !important;
+    font-size: var(--text-btn) !important;
+    padding: 12px 24px !important;
+    min-height: 48px !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.2) !important;
+}
+
+.stButton button[kind="primary"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4) !important;
+}
+
+.stButton button[kind="primary"]:active {
+    transform: translateY(0) !important;
+}
+
+/* Secondary Button (Overrides Streamlit Default) */
+.stButton button[kind="secondary"] {
+    background: transparent !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-md) !important;
+    color: var(--text-primary) !important;
+    font-weight: 600 !important;
+    font-size: var(--text-btn) !important;
+    padding: 12px 24px !important;
+    min-height: 48px !important;
+    transition: all 0.2s ease !important;
+}
+
+.stButton button[kind="secondary"]:hover {
+    border-color: var(--text-primary) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Button overrides for standard generic .stButton button without kind */
+.stButton button:not([kind]) {
+    background: transparent !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-md) !important;
+    color: var(--text-primary) !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+}
+.stButton button:not([kind]):hover {
+    border-color: var(--text-primary) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* ============================================
+   INPUTS & WIDGETS
+============================================ */
+/* Chat Input */
+[data-testid="stChatInput"] {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+}
+[data-testid="stChatInput"]:focus-within {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
+}
+
+/* Tables */
+[data-testid="stDataFrame"], [data-testid="stDataEditor"] {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--bg-card);
+}
+
+/* ============================================
+   ANIMATIONS
+============================================ */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,772 @@
+/* ============================================
+   STEEL PLANT DELAY ANALYTICS
+   LOGIN PAGE
+   Version 2.0
+============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ============================================
+   DESIGN SYSTEM
+============================================ */
+
+:root{
+
+    --primary:#2563EB;
+    --primary-dark:#1D4ED8;
+
+    --accent:#F97316;
+
+    --background:#08111F;
+
+    --text:#FFFFFF;
+
+    --text-light:#CBD5E1;
+
+    --border:rgba(255,255,255,.08);
+
+    --glass:rgba(10,18,32,.70);
+
+    --glass-2:rgba(255,255,255,.04);
+
+    --shadow:0 30px 60px rgba(0,0,0,.45);
+
+    --radius:24px;
+
+}
+
+/* ============================================
+   GLOBAL
+============================================ */
+
+html,
+body,
+[class*="css"]{
+
+    font-family:'Inter',sans-serif;
+
+}
+
+body{
+
+    overflow:hidden;
+
+}
+
+/* Hide Streamlit Elements */
+
+header,
+[data-testid="stHeader"],
+[data-testid="stToolbar"],
+[data-testid="stDecoration"],
+[data-testid="stStatusWidget"]{
+
+    display:none !important;
+
+    visibility:hidden !important;
+
+    height:0 !important;
+
+    min-height:0 !important;
+
+}
+
+footer{
+
+    display:none;
+
+}
+
+#MainMenu{
+
+    display:none;
+
+}
+
+[data-testid="stSidebar"]{
+
+    display:none;
+
+}
+
+/* Main Container */
+
+[data-testid="stAppViewContainer"]{
+
+    background:transparent;
+
+    padding-top:0 !important;
+
+}
+
+.main{
+
+    padding:0;
+
+}
+
+/* Streamlit 1.55 renamed .block-container's test id to stMainBlockContainer.
+   Target both so this keeps working across versions. */
+.block-container,
+[data-testid="stMainBlockContainer"]{
+
+    padding:0 !important;
+
+    margin:0 !important;
+
+    max-width:none !important;
+
+}
+
+/* ============================================
+   FULL SCREEN BACKGROUND
+============================================ */
+
+.login-page{
+
+    position:fixed;
+
+    inset:0;
+
+    /* Actual background image is set inline by login.py (base64-embedded).
+       This gradient-only fallback shows if that image isn't found, so the
+       page never goes blank. */
+    background-image:
+        linear-gradient(
+            rgba(3,10,18,.72),
+            rgba(3,10,18,.82)
+        );
+
+    background-color:var(--background);
+
+    background-size:cover;
+
+    background-position:center;
+
+    background-repeat:no-repeat;
+
+}
+
+/* Centers the real Streamlit content column on top of the backdrop.
+   The card can never wrap the form/footer via a hand-written <div> that
+   spans multiple st.markdown calls, so instead we center Streamlit's
+   own block container and style st.container(key="login_card") below. */
+[data-testid="stMainBlockContainer"]{
+
+    min-height:100vh;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+/* ============================================
+   FLOATING CARD
+   Targets st.container(key="login_card") — Streamlit adds the
+   "st-key-login_card" class to that container's real wrapping div,
+   so this actually wraps the title, form, and footer.
+============================================ */
+
+.st-key-login_card{
+
+    width:430px;
+
+    padding:48px;
+
+    border-radius:var(--radius);
+
+    background:var(--glass);
+
+    backdrop-filter:blur(18px);
+
+    -webkit-backdrop-filter:blur(18px);
+
+    border:1px solid var(--border);
+
+    box-shadow:var(--shadow);
+
+    animation:fadeUp .8s ease;
+
+}
+
+/* ============================================
+   LOGO
+============================================ */
+
+.brand{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:14px;
+
+    margin-bottom:28px;
+
+}
+
+.brand-logo{
+
+    width:56px;
+
+    height:56px;
+
+    border-radius:18px;
+
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        #60A5FA
+    );
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:24px;
+
+    color:white;
+
+    font-weight:800;
+
+}
+
+.brand-text{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.brand-title{
+
+    color:white;
+
+    font-size:22px;
+
+    font-weight:800;
+
+    letter-spacing:.3px;
+
+}
+
+.brand-subtitle{
+
+    color:var(--text-light);
+
+    font-size:13px;
+
+}
+
+/* ============================================
+   WELCOME
+============================================ */
+
+.login-title{
+
+    font-size:34px;
+
+    font-weight:800;
+
+    color:white;
+
+    text-align:center;
+
+    margin-bottom:12px;
+
+}
+
+.login-description{
+
+    text-align:center;
+
+    color:var(--text-light);
+
+    font-size:15px;
+
+    line-height:1.7;
+
+    margin-bottom:36px;
+
+}
+
+/* ============================================
+   STREAMLIT INPUTS
+============================================ */
+
+.stTextInput{
+
+    margin-bottom:18px;
+
+}
+
+.stTextInput label{
+
+    color:white !important;
+
+    font-weight:600;
+
+    font-size:14px;
+
+}
+
+.stTextInput input{
+
+    height:54px;
+
+    border-radius:14px;
+
+    border:1px solid rgba(255,255,255,.10);
+
+    background:var(--glass-2);
+
+    color:white;
+
+    padding-left:16px;
+
+    transition:.3s;
+
+}
+
+.stTextInput input::placeholder{
+
+    color:#94A3B8;
+
+}
+
+.stTextInput input:focus{
+
+    border:1px solid var(--primary);
+
+    box-shadow:0 0 0 3px rgba(37,99,235,.18);
+
+}
+/* ============================================
+   FORM LAYOUT
+============================================ */
+
+.stForm{
+
+    border:none !important;
+
+    background:transparent !important;
+
+    padding:0 !important;
+
+}
+
+.stForm > div{
+
+    gap:14px;
+
+}
+
+/* ============================================
+   CHECKBOX
+============================================ */
+
+.stCheckbox{
+
+    margin-top:6px;
+
+}
+
+.stCheckbox label{
+
+    color:var(--text-light) !important;
+
+    font-size:14px !important;
+
+}
+
+/* ============================================
+   FORGOT PASSWORD
+============================================ */
+
+.forgot-password{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    margin-top:8px;
+
+    margin-bottom:24px;
+
+}
+
+.forgot-password a{
+
+    color:#93C5FD;
+
+    text-decoration:none;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.forgot-password a:hover{
+
+    color:white;
+
+}
+
+/* ============================================
+   LOGIN BUTTON
+============================================ */
+
+.stButton>button,
+.stForm [data-testid="stFormSubmitButton"] button{
+
+    width:100%;
+
+    height:54px;
+
+    border:none;
+
+    border-radius:16px;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    letter-spacing:.2px;
+
+    color:white;
+
+    cursor:pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary-dark)
+        );
+
+    box-shadow:
+        0 15px 30px rgba(37,99,235,.35);
+
+    transition:
+        transform .25s,
+        box-shadow .25s,
+        background .25s;
+
+}
+
+.stButton>button:hover,
+.stForm [data-testid="stFormSubmitButton"] button:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 22px 40px rgba(37,99,235,.45);
+
+}
+
+.stButton>button:active,
+.stForm [data-testid="stFormSubmitButton"] button:active{
+
+    transform:translateY(0);
+
+}
+
+/* Password show/hide icon button — keep Streamlit's own small size,
+   just make it sit cleanly on the dark input. Without this rule it
+   would inherit no special styling and stay Streamlit's default. */
+[data-testid="stTextInput"] button{
+
+    width:auto !important;
+
+    height:auto !important;
+
+    min-height:auto !important;
+
+    padding:6px !important;
+
+    background:transparent !important;
+
+    box-shadow:none !important;
+
+    border-radius:8px !important;
+
+    color:var(--text-light) !important;
+
+}
+
+[data-testid="stTextInput"] button:hover{
+
+    background:rgba(255,255,255,.08) !important;
+
+    transform:none !important;
+
+    box-shadow:none !important;
+
+}
+
+/* ============================================
+   DIVIDER
+============================================ */
+
+.login-divider{
+
+    display:flex;
+
+    align-items:center;
+
+    margin:30px 0;
+
+}
+
+.login-divider::before,
+.login-divider::after{
+
+    content:"";
+
+    flex:1;
+
+    height:1px;
+
+    background:rgba(255,255,255,.08);
+
+}
+
+.login-divider span{
+
+    margin:0 16px;
+
+    color:#94A3B8;
+
+    font-size:13px;
+
+}
+
+/* ============================================
+   FOOTER
+============================================ */
+
+.login-footer{
+
+    margin-top:34px;
+
+    text-align:center;
+
+    color:#94A3B8;
+
+    font-size:12px;
+
+    line-height:1.7;
+
+}
+
+/* ============================================
+   BADGE
+============================================ */
+
+.hero-badge{
+
+    display:flex;
+
+    width:max-content;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin:0 auto 18px;
+
+    padding:8px 18px;
+
+    border-radius:999px;
+
+    background:rgba(37,99,235,.15);
+
+    border:1px solid rgba(96,165,250,.30);
+
+    color:#BFDBFE;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    text-transform:uppercase;
+
+}
+
+/* ============================================
+   MESSAGE STYLING
+============================================ */
+
+.stAlert{
+
+    border-radius:14px;
+
+    border:none;
+
+}
+
+.stSuccess{
+
+    background:rgba(34,197,94,.18);
+
+}
+
+.stError{
+
+    background:rgba(239,68,68,.18);
+
+}
+
+.stWarning{
+
+    background:rgba(245,158,11,.18);
+
+}
+
+/* ============================================
+   SCROLLBAR
+============================================ */
+
+::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#334155;
+
+    border-radius:999px;
+
+}
+
+/* ============================================
+   ANIMATIONS
+============================================ */
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:
+            translateY(40px)
+            scale(.97);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+@keyframes glow{
+
+    0%{
+
+        box-shadow:
+            0 0 0 rgba(37,99,235,.35);
+
+    }
+
+    50%{
+
+        box-shadow:
+            0 0 22px rgba(37,99,235,.40);
+
+    }
+
+    100%{
+
+        box-shadow:
+            0 0 0 rgba(37,99,235,.35);
+
+    }
+
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+
+@media (max-width:900px){
+
+    .login-card{
+
+        width:90%;
+
+        max-width:430px;
+
+        padding:40px 30px;
+
+    }
+
+    .login-title{
+
+        font-size:30px;
+
+    }
+
+}
+
+@media (max-width:600px){
+
+    .login-card{
+
+        width:94%;
+
+        padding:34px 24px;
+
+        border-radius:18px;
+
+    }
+
+    .brand{
+
+        flex-direction:column;
+
+        text-align:center;
+
+    }
+
+    .brand-text{
+
+        align-items:center;
+
+    }
+
+    .login-title{
+
+        font-size:28px;
+
+    }
+
+    .login-description{
+
+        font-size:14px;
+
+    }
+
+}

@@ -1,0 +1,157 @@
+/* ============================================
+   STEEL PLANT DELAY ANALYTICS
+   DASHBOARD LAYOUT
+============================================ */
+
+/* Main Container */
+[data-testid="stAppViewContainer"] {
+    background: transparent;
+    padding: 0 !important;
+}
+
+.main {
+    padding: 0;
+}
+
+[data-testid="stMainBlockContainer"] {
+    padding: 32px !important;
+    margin: 0 !important;
+    max-width: none !important;
+    min-height: calc(100vh - 90px);
+}
+
+/* ============================================
+   CUSTOM HEADER (90px)
+============================================ */
+.custom-header {
+    height: 90px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+/* Header Left: Branding */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.header-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent-blue), #60A5FA);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 800;
+    color: white;
+}
+
+.header-titles {
+    display: flex;
+    flex-direction: column;
+}
+
+.header-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.header-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Header Right: User Info */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.header-datetime {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.header-user-chip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+}
+
+.header-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.header-username {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.header-role {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ============================================
+   MAIN CONTENT AREA
+============================================ */
+.dashboard-content-wrapper {
+    /* Accounts for sidebar width */
+    margin-left: 0px; 
+    padding: 32px;
+    min-height: calc(100vh - 90px);
+    transition: margin-left 0.3s ease;
+}
+
+/* We don't use Streamlit's native sidebar, we build a custom one, 
+   so the content wrapper doesn't need to be offset by Streamlit's native sidebar css */
+
+.page-title {
+    font-size: var(--text-section-heading);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+}
+
+/* Typography styles */
+h1 {
+    font-size: var(--text-app-title) !important;
+    font-weight: 800 !important;
+}
+
+h2 {
+    font-size: var(--text-section-heading) !important;
+    font-weight: 700 !important;
+}
+
+p {
+    font-size: var(--text-body) !important;
+    line-height: 1.6 !important;
+}
