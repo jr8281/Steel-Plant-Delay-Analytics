@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Date, DateTime, Float, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, Date, DateTime, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -60,3 +60,51 @@ class User(Base):
     hashed_password = Column(String(255), nullable=False)
     role = Column(String(20), nullable=False, default="operator")
     shop_id = Column(Integer, ForeignKey("shops.id"), nullable=True)
+    must_reset_password = Column(Boolean, nullable=False, default=False)
+
+
+class TokenBlacklist(Base):
+    """Revoked JWTs (via logout), checked on every authenticated request."""
+    __tablename__ = "token_blacklist"
+    id = Column(Integer, primary_key=True)
+    jti = Column(String(36), unique=True, nullable=False, index=True)
+    expires_at = Column(DateTime, nullable=False)
+    revoked_at = Column(DateTime, server_default=func.now())
+
+
+class IngestionLog(Base):
+    """Audit trail for every CSV/Excel upload."""
+    __tablename__ = "ingestion_logs"
+    id = Column(Integer, primary_key=True)
+    filename = Column(String(255), nullable=False)
+    mode = Column(String(20), nullable=False)  # "replace" or "append"
+    records_ingested = Column(Integer, nullable=False)
+    uploaded_by_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    uploaded_at = Column(DateTime, server_default=func.now())
+    uploaded_by = relationship("User")
+
+class ChatSession(Base):
+    """Persistent chat session for multi-turn conversations."""
+    __tablename__ = "chat_sessions"
+    
+    id = Column(Integer, primary_key=True)
+    session_id = Column(String(36), unique=True, nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+    last_accessed_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    
+    messages = relationship("ChatMessage", back_populates="session")
+    user = relationship("User")
+
+
+class ChatMessage(Base):
+    """Individual messages in a chat session."""
+    __tablename__ = "chat_messages"
+    
+    id = Column(Integer, primary_key=True)
+    session_id = Column(String(36), ForeignKey("chat_sessions.session_id"), nullable=False, index=True)
+    role = Column(String(20), nullable=False)  # "user" or "assistant"
+    content = Column(String(2000), nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+    
+    session = relationship("ChatSession", back_populates="messages")

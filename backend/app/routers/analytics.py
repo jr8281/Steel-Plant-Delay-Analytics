@@ -37,7 +37,14 @@ def get_equipment_reliability(db: Session = Depends(get_db), user: User = Depend
 
 
 @router.get("/compare")
-def compare(shop_ids: list[int] = Query(...), metric: str = "eff_durn", start_date: date | None = None, end_date: date | None = None, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def compare(
+    shop_ids: list[int] = Query(...),
+    metric: str = "eff_durn",
+    start_date: date | None = None,
+    end_date: date | None = None,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
     try:
         return ae.compare_shops(db, user, shop_ids, metric, start_date, end_date)
     except ValueError as exc:

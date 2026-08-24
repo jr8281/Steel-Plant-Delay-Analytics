@@ -1,162 +1,92 @@
 import base64
+import os
 from pathlib import Path
+
 import requests
 import streamlit as st
-from pages_content.utils import API
+
+API = os.getenv("API_BASE_URL", "http://localhost:8000")
 
 
-def load_css():
-    css_path = Path(__file__).parent.parent / "assets" / "styles" / "login.css"
-    if css_path.exists():
-        st.markdown(f"<style>{css_path.read_text(encoding='utf-8')}</style>", unsafe_allow_html=True)
-
-
-def image_to_base64(path: Path):
-    if not path.exists():
-        return None
-    return base64.b64encode(path.read_bytes()).decode("utf-8")
+def _get_base64_image(image_path: Path) -> str:
+    if not image_path.exists():
+        return ""
+    with open(image_path, "rb") as f:
+        return base64.b64encode(f.read()).decode("utf-8")
 
 
 def render():
-    load_css()
+    css_files = ["theme.css", "login.css"]
+    css_content = ""
+    for file in css_files:
+        css_path = Path(__file__).parent.parent / "assets" / "styles" / file
+        if css_path.exists():
+            css_content += css_path.read_text(encoding="utf-8") + "\n"
+    if css_content:
+        st.markdown(f"<style>{css_content}</style>", unsafe_allow_html=True)
 
-    assets = Path(__file__).parent.parent / "assets" / "images"
-    logo_path = assets / "logo.png"
+    logo_path = Path(__file__).parent.parent / "assets" / "images" / "logo.png"
+    logo_b64 = _get_base64_image(logo_path)
 
-    logo_html = ""
-    b64 = image_to_base64(logo_path)
-    if b64:
-        logo_html = f'<img src="data:image/png;base64,{b64}" width="72">'
+    bg_path = Path(__file__).parent.parent / "assets" / "images" / "background.png"
+    bg_b64 = _get_base64_image(bg_path)
 
-    # Background image: embedded as base64 rather than referenced via a
-    # CSS url() path. A relative url("...") in login.css is resolved by
-    # the BROWSER against the current page URL, not your project folder —
-    # inside Docker this almost never lines up with where Streamlit
-    # actually serves static files from, so the image silently fails to
-    # load. Base64-embedding it here guarantees it always renders.
-    background_style = ""
-    background_candidates = sorted(assets.glob("background.*"))
-    if background_candidates:
-        bg_path = background_candidates[0]
-        bg_mime = "jpeg" if bg_path.suffix.lower() in (".jpg", ".jpeg") else bg_path.suffix.lstrip(".").lower()
-        bg_b64 = image_to_base64(bg_path)
-        if bg_b64:
-            background_style = (
-                f' style="background-image:linear-gradient(rgba(3,10,18,.72),rgba(3,10,18,.82)),'
-                f'url(data:image/{bg_mime};base64,{bg_b64});"'
-            )
+    st.markdown(
+        f"""<style>
+        .stApp, [data-testid="stAppViewContainer"], .login-page {{
+            background-image: linear-gradient(rgba(3,10,18,0.72), rgba(3,10,18,0.82)), url("/app/static/images/background.png"), url("data:image/png;base64,{bg_b64}") !important;
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+            background-attachment: fixed !important;
+        }}
+        </style>""",
+        unsafe_allow_html=True,
+    )
 
-    # Decorative full-screen backdrop only — deliberately has no children.
-    # A hand-written <div> here can't be closed later by a different
-    # st.markdown call (see login.css comments), so all real content below
-    # lives in an actual Streamlit container instead.
-    st.markdown(f'<div class="login-page"{background_style}></div>', unsafe_allow_html=True)
+    st.markdown('<div class="login-page"></div>', unsafe_allow_html=True)
 
-    card = st.container(key="login_card")
-
-    with card:
-        st.markdown(
-            f"""
-<div class="brand">
-  {logo_html}
-  <div class="brand-text">
-    <div class="brand-title">Steel Plant Delay Analytics</div>
-    <div class="brand-subtitle">Enterprise Operational Intelligence</div>
-  </div>
-</div>
-
-<div class="hero-badge">LIVE MONITORING</div>
-
-<div class="login-title">Welcome Back</div>
-
-<div class="login-description">
-  Sign in to access production analytics,
-  maintenance insights and operational dashboards.
-</div>
-""",
-            unsafe_allow_html=True,
-        )
-
-        with st.form("login_form", clear_on_submit=False):
-
-            username = st.text_input(
-                "Username",
-                placeholder="Enter your username"
-            )
-
-            password = st.text_input(
-                "Password",
-                type="password",
-                placeholder="Enter your password"
-            )
-
-            c1, c2 = st.columns([1, 1])
-
-            with c1:
-                st.checkbox("Remember Me")
-
-            with c2:
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        with st.container(key="login_card"):
+            if logo_b64:
                 st.markdown(
-                    '<div class="forgot-password"><a href="#">Forgot Password?</a></div>',
-                    unsafe_allow_html=True
+                    f'<div class="login-logo" style="text-align:center;margin-bottom:16px;">'
+                    f'<img src="data:image/png;base64,{logo_b64}" style="width:72px;height:72px;object-fit:contain;">'
+                    f'</div>',
+                    unsafe_allow_html=True,
                 )
+            st.markdown('<h1 class="login-title">Steel Plant Delay Analytics</h1>', unsafe_allow_html=True)
+            st.markdown('<p class="login-description">Enterprise Operational Intelligence</p>', unsafe_allow_html=True)
 
-            submitted = st.form_submit_button(
-                "Access Dashboard →",
-                use_container_width=True
-            )
+            with st.form("login_form"):
+                username = st.text_input("Username")
+                password = st.text_input("Password", type="password")
+                submitted = st.form_submit_button("Sign In", use_container_width=True, type="primary")
 
-        if submitted:
-            if not username or not password:
-                st.error("Please enter both username and password.")
-            else:
-                with st.spinner("Signing in..."):
+            if submitted:
+                if not username or not password:
+                    st.error("Please enter both username and password.")
+                else:
                     try:
-                        response = requests.post(
+                        resp = requests.post(
                             f"{API}/auth/login",
-                            json={
-                                "username": username,
-                                "password": password
-                            },
-                            timeout=20
+                            json={"username": username, "password": password},
+                            timeout=15,
                         )
+                    except requests.RequestException as exc:
+                        st.error(f"Could not reach the backend at {API}. Is it running? ({exc})")
+                        st.stop()
 
-                        if not response.ok:
-                            try:
-                                detail = response.json().get(
-                                    "detail",
-                                    "Invalid username or password."
-                                )
-                            except Exception:
-                                detail = "Unable to sign in."
-
-                            st.error(detail)
-
-                        else:
-                            data = response.json()
-
-                            st.session_state["authenticated"] = True
-                            st.session_state["token"] = data["access_token"]
-                            st.session_state["username"] = data["username"]
-                            st.session_state["role"] = data["role"]
-                            st.session_state["shop_id"] = data.get("shop_id")
-
-                            st.success("Login successful!")
-
-                            st.rerun()
-
-                    except requests.RequestException:
-                        st.error(
-                            "Unable to connect to the FastAPI server. "
-                            "Please make sure the backend is running."
-                        )
-
-        st.markdown(
-            """
-            <div class="login-footer">
-                © 2026 Steel Plant Delay Analytics<br>
-                Enterprise Operational Intelligence Platform
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+                    if resp.ok:
+                        data = resp.json()
+                        st.session_state["authenticated"] = True
+                        st.session_state["token"] = data["access_token"]
+                        st.session_state["username"] = data["username"]
+                        st.session_state["role"] = data["role"]
+                        st.session_state["shop_id"] = data.get("shop_id")
+                        st.session_state["must_reset_password"] = data.get("must_reset_password", False)
+                        st.rerun()
+                    else:
+                        detail = resp.json().get("detail", "Login failed.") if resp.content else "Login failed."
+                        st.error(detail)

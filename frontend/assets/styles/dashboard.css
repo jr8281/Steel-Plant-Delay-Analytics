@@ -3,20 +3,26 @@
    DASHBOARD LAYOUT
 ============================================ */
 
-/* Main Container */
+/* Main Container - Full Page Layout */
 [data-testid="stAppViewContainer"] {
     background: transparent;
     padding: 0 !important;
 }
 
-.main {
-    padding: 0;
+[data-testid="stSidebar"],
+[data-testid="stSidebarCollapseButton"],
+[data-testid="stCollapsedControl"] {
+    display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
 }
 
+.main,
 [data-testid="stMainBlockContainer"] {
-    padding: 32px !important;
+    padding: 24px 40px !important;
     margin: 0 !important;
-    max-width: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
     min-height: calc(100vh - 90px);
 }
 

@@ -1,27 +1,35 @@
+version: '3.9'
+
 services:
   db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: steelplant
-      POSTGRES_USER: steeluser
-      POSTGRES_PASSWORD: steelpassword
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: ${POSTGRES_DB:-steelplant}
+      POSTGRES_USER: ${POSTGRES_USER:-steeluser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in .env}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U steeluser -d steelplant"]
-      interval: 5s
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-steeluser} -d ${POSTGRES_DB:-steelplant}" ]
+      interval: 10s
       timeout: 5s
-      retries: 12
+      retries: 5
+      start_period: 10s
+    networks:
+      - steel_network
+    restart: unless-stopped
 
   backend:
-    build: ./backend
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
     environment:
-      DATABASE_URL: postgresql+psycopg2://steeluser:steelpassword@db:5432/steelplant
-      JWT_SECRET_KEY: change-this-for-any-public-deployment
-      CORS_ORIGINS: http://localhost:8501
-      GEMINI_API_KEY: AQ.Ab8RN6KZCiAI4sG0LZksi_X6cfQ7b50KVb0eypBay1D2_BAShQ
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-steeluser}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-steelplant}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?JWT_SECRET_KEY must be set in .env}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8501}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
     ports:
       - "8000:8000"
     volumes:
@@ -29,15 +37,41 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - steel_network
+    restart: unless-stopped
 
   frontend:
-    build: ./frontend
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
     environment:
       API_BASE_URL: http://backend:8000
     ports:
       - "8501:8501"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8501/_stcore/health" ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - steel_network
+    restart: unless-stopped
 
 volumes:
   postgres_data:
+    driver: local
+
+networks:
+  steel_network:
+    driver: bridge

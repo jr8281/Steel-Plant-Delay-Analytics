@@ -6,3 +6,25 @@ __pycache__/
 *.pyc
 *.db
 *.log
+
+# Secrets
+.env
+.env.*.local
+*.key
+*.pem
+
+# Streamlit secrets (NEVER commit)
+.streamlit/secrets.toml
+.env
+.env.local
+.env.*.local
+
+# Cache files
+.streamlit/cache/
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+.idea/
+*.swp

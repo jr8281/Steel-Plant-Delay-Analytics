@@ -75,11 +75,12 @@ html, body, [class*="css"], .stApp {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Hide Streamlit Defaults */
-header, [data-testid="stHeader"], [data-testid="stToolbar"], #MainMenu, footer {
+/* Hide Streamlit Native Defaults for Full-Page Top Bar Layout */
+header, [data-testid="stHeader"], [data-testid="stToolbar"], #MainMenu, footer, [data-testid="stSidebar"], [data-testid="stSidebarCollapseButton"], [data-testid="stCollapsedControl"] {
     display: none !important;
     visibility: hidden !important;
     height: 0 !important;
+    width: 0 !important;
 }
 
 /* Base resets */

@@ -29,6 +29,39 @@
     margin-bottom: 16px;
 }
 
+.hero-banner {
+    background: linear-gradient(135deg, #1e3a8a, #d97706);
+    padding: 32px 40px;
+    border-radius: 16px;
+    margin-bottom: 32px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+}
+
+.hero-banner-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.hero-banner-icon {
+    font-size: 32px;
+}
+
+.hero-banner-title {
+    color: white !important;
+    font-size: 32px !important;
+    font-weight: 800 !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+}
+
+.hero-banner-subtitle {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 16px !important;
+    margin: 0 !important;
+}
+
 /* Override Streamlit's Native Metric Cards */
 [data-testid="stMetric"] {
     background: var(--bg-card);

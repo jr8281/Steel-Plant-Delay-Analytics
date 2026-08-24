@@ -24,9 +24,18 @@ def db():
     session.add_all([first_shop, second_shop, equipment, operating, electrical])
     session.flush()
     session.add_all([
-        DelayEvent(delay_date=date(2026, 1, 1), shop_id=first_shop.id, equipment_id=equipment.id, agency_id=operating.id, durn=3, eff_durn=2, cum_delay=2, freq=1),
-        DelayEvent(delay_date=date(2026, 1, 2), shop_id=first_shop.id, equipment_id=equipment.id, agency_id=electrical.id, durn=5, eff_durn=4, cum_delay=6, freq=1),
-        DelayEvent(delay_date=date(2026, 1, 2), shop_id=second_shop.id, equipment_id=equipment.id, agency_id=operating.id, durn=8, eff_durn=10, cum_delay=10, freq=1),
+        DelayEvent(
+            delay_date=date(2026, 1, 1), shop_id=first_shop.id, equipment_id=equipment.id,
+            agency_id=operating.id, durn=3, eff_durn=2, cum_delay=2, freq=1,
+        ),
+        DelayEvent(
+            delay_date=date(2026, 1, 2), shop_id=first_shop.id, equipment_id=equipment.id,
+            agency_id=electrical.id, durn=5, eff_durn=4, cum_delay=6, freq=1,
+        ),
+        DelayEvent(
+            delay_date=date(2026, 1, 2), shop_id=second_shop.id, equipment_id=equipment.id,
+            agency_id=operating.id, durn=8, eff_durn=10, cum_delay=10, freq=1,
+        ),
     ])
     session.commit()
     yield session
