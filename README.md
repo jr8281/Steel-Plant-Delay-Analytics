@@ -169,7 +169,7 @@ Steel-Plant-Delay-Analytics/
 
 **1. Clone and configure**
 ```bash
-git clone https://github.com/<your-username>/Steel-Plant-Delay-Analytics.git
+git clone https://github.com/<jr8281>/Steel-Plant-Delay-Analytics.git
 cd Steel-Plant-Delay-Analytics
 cp .env.example .env
 ```
@@ -384,6 +384,6 @@ docker compose exec backend pytest -v
 ## 📝 License
 
 MIT License — See LICENSE file for details.
-Built during a 2-month internship at Visakhapatnam Steel Plant (RINL), July - August 2026.
+Built during a 1-month internship at Visakhapatnam Steel Plant (RINL), June - July 2026.
 
 ---
