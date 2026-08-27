@@ -373,12 +373,6 @@ docker compose up --build
 docker compose exec backend pytest -v
 ```
 
-**Before submitting PR:**
-1. Run linter: `docker compose exec backend ruff check app/`
-2. Type check: `docker compose exec backend mypy app/`
-3. Test: `docker compose exec backend pytest -v`
-4. Update README if adding features
-
 ---
 
 ## 📝 License
